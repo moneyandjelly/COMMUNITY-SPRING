@@ -27,6 +27,9 @@ public class AccountProfile {
     @JoinColumn(name = "account_id", referencedColumnName = "id", nullable = false)
     private Account account;
 
+    public AccountProfile() {
+    }
+
     public AccountProfile(Account account, String nickname) {
         this.account = account;
         this.nickname = nickname;
