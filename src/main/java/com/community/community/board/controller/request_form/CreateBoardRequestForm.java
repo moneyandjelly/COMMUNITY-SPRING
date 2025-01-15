@@ -15,6 +15,6 @@ public class CreateBoardRequestForm {
     final private String userToken;
 
     public CreateBoardRequest toCreateBoardRequest(Long accountId) {
-        return new CreateBoardRequest(title, accountId, userToken);
+        return new CreateBoardRequest(title, accountId, content);
     }
 }
