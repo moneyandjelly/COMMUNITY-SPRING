@@ -6,6 +6,10 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,16 +30,29 @@ public class RedisCacheServiceImpl implements RedisCacheService {
 
     @Override
     public Long getValueByKey(String token) {
-        ValueOperations<String, String> value = redisTemplate.opsForValue();
-        String tmpAccountId = value.get(token);
-        Long accountId;
-        if (tmpAccountId == null) {
-            accountId = null;
-        } else {
-            accountId = Long.parseLong(tmpAccountId);
-        }
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(token);
 
-        return accountId;
+            String actualToken = jsonNode.get("value").asText();
+            log.info(actualToken);
+            ValueOperations<String, String> value = redisTemplate.opsForValue();
+            String tmpAccountId = value.get(actualToken);
+
+            if (tmpAccountId == null) {
+                log.warn("No accountId found for token: {}", actualToken);
+                return null;
+            }
+
+            return Long.parseLong(tmpAccountId);
+
+        } catch (JsonProcessingException e) {
+            log.error("Failed to parse token JSON: {}", token, e);
+            return null;
+        } catch (Exception e) {
+            log.error("Unexpected error while processing token: {}", token, e);
+            return null;
+        }
     }
 
     @Override
