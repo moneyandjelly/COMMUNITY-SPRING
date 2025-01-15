@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.community.community.board.controller.request_form.CreateBoardRequestForm;
+import com.community.community.board.controller.request_form.DeleteBoardRequestForm;
 import com.community.community.board.controller.request_form.ListBoardRequestForm;
 import com.community.community.board.controller.response_form.ListBoardResponseForm;
 import com.community.community.board.entity.Board;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +51,7 @@ public class BoardController {
 
         Long accountId = redisCacheService.getValueByKey(createBoardRequestForm.getUserToken());
         log.info("accountId -> {}", accountId);
-        
+
         return boardService.register(createBoardRequestForm.toCreateBoardRequest(accountId));
     }
 
@@ -58,5 +60,16 @@ public class BoardController {
         log.info("boardRead()");
 
         return boardService.read(boardId);
+    }
+
+    @DeleteMapping("/{boardId}")
+    public void deleteBoard(@PathVariable("boardId") Long boardId,
+            @RequestBody DeleteBoardRequestForm deleteBoardRequestForm) {
+        log.info("deleteBoard() -> {}", deleteBoardRequestForm);
+        Long accountId = redisCacheService.getValueByKey(deleteBoardRequestForm.getUserToken());
+        log.info("어카운트 ID", accountId);
+        if (!boardService.delete(boardId)) {
+            throw new RuntimeException("게시글 존재하지 않거나 이미 삭제되었습니다.");
+        }
     }
 }

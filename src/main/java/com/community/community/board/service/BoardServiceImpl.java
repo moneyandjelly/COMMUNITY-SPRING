@@ -52,13 +52,25 @@ public class BoardServiceImpl implements BoardService {
     public ReadBoardResponse read(Long boardId) {
         Optional<Board> maybeBoard = boardRepository.findByIdWithWriter(boardId);
 
-        if(maybeBoard.isEmpty()) {
+        if (maybeBoard.isEmpty()) {
             log.info("정보가 없습니다");
             return null;
         }
 
-        Board board=maybeBoard.get();
+        Board board = maybeBoard.get();
         return ReadBoardResponse.from(board);
+    }
+
+    @Override
+    public boolean delete(Long boardId) {
+        Optional<Board> maybeBoard = boardRepository.findById(boardId);
+        if (maybeBoard.isEmpty()) {
+            return false;
+        }
+
+        boardRepository.deleteById(boardId);
+
+        return !boardRepository.existsById(boardId);
     }
 
 }
