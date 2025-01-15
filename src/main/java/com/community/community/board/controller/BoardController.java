@@ -9,6 +9,7 @@ import com.community.community.board.controller.response_form.ListBoardResponseF
 import com.community.community.board.entity.Board;
 import com.community.community.board.service.BoardService;
 import com.community.community.board.service.response.ListBoardResponse;
+import com.community.community.board.service.response.ReadBoardResponse;
 import com.community.community.redis_cache.service.RedisCacheService;
 
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -51,4 +53,10 @@ public class BoardController {
         return boardService.register(createBoardRequestForm.toCreateBoardRequest(accountId));
     }
 
+    @GetMapping("/{boardId}")
+    public ReadBoardResponse readBoard(@PathVariable("boardId") Long boardId) {
+        log.info("boardRead()");
+
+        return boardService.read(boardId);
+    }
 }
