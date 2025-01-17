@@ -9,4 +9,5 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class DeleteBoardRequestForm {
     final private String userToken;
+    final private Long accountProfileId;
 }

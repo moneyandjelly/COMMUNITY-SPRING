@@ -16,9 +16,10 @@ public class ReadBoardResponse {
     private final String content;
     private final LocalDateTime createDate;
     private final LocalDateTime updateDate;
+    private final Long accountProfileId;
 
     public static ReadBoardResponse from(Board board) {
         return new ReadBoardResponse(board.getBoardId(), board.getTitle(), board.getWriter().getNickname(),
-                board.getContent(), board.getCreateDate(), board.getUpdateDate());
+                board.getContent(), board.getCreateDate(), board.getUpdateDate(), board.getWriter().getId());
     }
 }

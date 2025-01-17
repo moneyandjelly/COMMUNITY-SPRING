@@ -66,8 +66,14 @@ public class BoardController {
     public void deleteBoard(@PathVariable("boardId") Long boardId,
             @RequestBody DeleteBoardRequestForm deleteBoardRequestForm) {
         log.info("deleteBoard() -> {}", deleteBoardRequestForm);
-        Long accountId = redisCacheService.getValueByKey(deleteBoardRequestForm.getUserToken());
-        log.info("어카운트 ID", accountId);
+        Long requestUserAccountId = redisCacheService.getValueByKey(deleteBoardRequestForm.getUserToken());
+        log.info("작성자의 유저 ID", deleteBoardRequestForm.getAccountProfileId());
+        log.info("요청한 유저 ID", requestUserAccountId);
+
+        if (!deleteBoardRequestForm.getAccountProfileId().equals(requestUserAccountId)) {
+            throw new RuntimeException("게시글 삭제 권한이 없습니다.");
+        }
+
         if (!boardService.delete(boardId)) {
             throw new RuntimeException("게시글 존재하지 않거나 이미 삭제되었습니다.");
         }
