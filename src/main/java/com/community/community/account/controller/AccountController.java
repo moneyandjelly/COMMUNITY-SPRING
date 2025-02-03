@@ -11,5 +11,5 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @RequestMapping("/account")
 public class AccountController {
-    
+    // 테스트
 }
