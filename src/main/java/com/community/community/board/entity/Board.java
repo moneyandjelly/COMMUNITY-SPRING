@@ -39,16 +39,20 @@ public class Board {
     @Setter
     private String content;
 
-    public Board(String title, AccountProfile writer, String content) {
+    @Setter
+    private String s3url;
+
+    public Board(String title, AccountProfile writer, String content, String s3url) {
         this.title = title;
         this.writer = writer;
         this.content = content;
+        this.s3url = s3url;
     }
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @CreationTimestamp
     private LocalDateTime createDate;
-    
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
     @UpdateTimestamp
     private LocalDateTime updateDate;

@@ -1,5 +1,8 @@
 package com.community.community.s3.controller;
 
+import java.util.Map;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,7 +21,9 @@ public class S3Controller {
     }
 
     @GetMapping("/presigned-url")
-    public String generatePresignedUrl(@RequestParam String fileName) {
-        return s3Service.generatePresignedUrl(fileName);
+    public ResponseEntity<Map<String, String>> getPresignedUrl(@RequestParam String fileName) {
+        Map<String, String> response = s3Service.generatePresignedUrl(fileName);
+        return ResponseEntity.ok(response);
     }
+
 }

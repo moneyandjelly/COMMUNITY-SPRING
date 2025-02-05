@@ -14,8 +14,8 @@ public class CreateBoardRequest {
     final private String title;
     final private Long accountId;
     final private String content;
-
+    final private String s3url;
     public Board toBoard(AccountProfile writer) {
-        return new Board(title, writer, content);
+        return new Board(title, writer, content, s3url);
     }
 }
